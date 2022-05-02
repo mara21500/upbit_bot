@@ -39,38 +39,7 @@ def printall():
     for i in range(n):
         msg += f"{'%10s'%coin_list[i]} 목표가: {'%11.1f'%target[i]} 현재가: {'%11.1f'%prices[i]} 매수금액: {'%7d'%money_list[i]} hold: {'%5s'%hold[i]} status: {op_mode[i]}\n"
     print(msg)
-def save_data(krw_balance): # 만약 존버했을 경우와 비교를 하는 함수
-    # 자신이 존버를 할 거라고 생각을 하고 해당 코인을 얼마나 가지고 있을 예정인지 변수 설정
-    own_coin_list_04_08 = [
-        0, # BTC 만약 자신이 존버를 할 경우 가지고 있을 법한 비트코인 개수
-        0, # ETH
-        0 # DOGE
-    ]
-    df_saved_data = pd.read_csv('saved_data.csv')
-    now_prices = [-1]*(n) 
-    jonbeo = "----------들고만 있었으면----------\n"
-    total_jonbeo = 0
-    auto_upbit = "----------자동화----------\n"
-    auto_upbit += "자동화 총 금액 -> " + str(krw_balance) + "\n"
-    for i in range(n):
-        now_prices[i] = pyupbit.get_current_price(coin_list[i])
-        total_jonbeo += now_prices[i]*own_coin_list_04_08[i]
-        jonbeo += coin_list[i] + " 현 가격: " + str(now_prices[i]) + "이 코인의 총 가격" + str(now_prices[i]*own_coin_list_04_08[i]) + "\n"
-        time.sleep(0.1)
-    jonbeo += "지금까지 존버했으면 총 금액 -> " + str(total_jonbeo) + "\n"
-    msg = jonbeo + auto_upbit + "존버와의 금액 차이 -> " + str(krw_balance - total_jonbeo) + "원 벌었음(-이면 잃은거)\n"
-    try:
-        dif_yesterday = krw_balance - df_saved_data.iloc[-1]['auto_upbit']
-        msg += "!!어제와의 금액 차이!!: " + str(dif_yesterday)
-        df2 = pd.DataFrame(columns=['date','jonbeo','auto_upbit','difference_jonbeo_autoupbit','difference_yesterday'])
-        df2 = df2.append({'date':now.strftime('%Y-%m-%d %H:%M:%S'), 'jonbeo':total_jonbeo, 'auto_upbit': krw_balance, 'difference_jonbeo_autoupbit':krw_balance - total_jonbeo,'difference_yesterday':dif_yesterday}, ignore_index=True)
-        df2.to_csv('saved_data.csv', mode='a', header=False)
-    except:        
-        df2 = pd.DataFrame(columns=['date','jonbeo','auto_upbit','difference_jonbeo_autoupbit'])
-        df2 = df2.append({'date':now.strftime('%Y-%m-%d %H:%M:%S'), 'jonbeo':total_jonbeo, 'auto_upbit': krw_balance, 'difference_jonbeo_autoupbit':krw_balance - total_jonbeo}, ignore_index=True)
-        df2.to_csv('saved_data.csv', mode='a', header=False)
-    print(msg)
-    bot.sendMessage(mc,msg)
+
 def get_yesterday_ma15(ticker):
     df_get_yesterday_ma15 = pyupbit.get_ohlcv(ticker)
     close = df_get_yesterday_ma15['close']
