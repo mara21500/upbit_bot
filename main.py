@@ -61,11 +61,11 @@ def get_yesterday_ma15(ticker):
 
 # 객체 생성
 load_dotenv()
-access = "CC4Gkbsrso1GfGDCmrugIMGqtFK9kdjDSMsMKxH8"
-secret = "xG6z5F0XU8InySJltW5qK4e6Vuh2aQmKjnQDx0pK"
+access = ""
+secret = ""
 upbit = pyupbit.Upbit(access, secret)
-token = "5119928978:AAET28BR7Kcg6ua7vdhGfVKYjeggpJQYk9A"
-mc = "5130221034"
+token = ""
+mc = ""
 bot = telegram.Bot(token)
 df = pd.read_csv('dataset.csv')
 df2 = pd.DataFrame(columns=['date','jonbeo','auto_upbit','difference_jonbeo_autoupbit'])
