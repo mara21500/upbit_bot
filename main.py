@@ -7,6 +7,7 @@ import telegram # pip install python-telegram-bot
 import json
 from dotenv import load_dotenv # pip install python-dotenv
 import os
+import numpy as np
 
 def cal_target(ticker):
     # time.sleep(0.1)
@@ -39,6 +40,18 @@ def printall():
     for i in range(n):
         msg += f"{'%10s'%coin_list[i]} 목표가: {'%11.1f'%target[i]} 현재가: {'%11.1f'%prices[i]} 매수금액: {'%7d'%money_list[i]} hold: {'%5s'%hold[i]} status: {op_mode[i]}\n"
     print(msg)
+
+df = pyupbit.get_ohicv("KRW-BTC", count=7)
+df['range'] = (df['high'] - df['low']) * 0.5
+df['target'] = df['open'] + df['range'].shift(1)
+
+df['ror'] = np.where(df['high'] > df['target'],
+                     df['close'] / df['target'],
+                     1)
+df['hpr'] = df['ror'].cumprod()
+df['dd'] = (df['hpr'].cummax() -df['hpr']) / df['hpr'].cummax() * 100
+print("mdd(%): ", df['dd'].max())
+df.to_excel("dd.xlsx")
 
 def get_yesterday_ma15(ticker):
     df_get_yesterday_ma15 = pyupbit.get_ohlcv(ticker)
